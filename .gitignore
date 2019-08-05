@@ -1,0 +1,6 @@
+__pycache__
+.venv
+.coverage
+coverage.xml
+docker-compose.override.yml
+nosetests.xml

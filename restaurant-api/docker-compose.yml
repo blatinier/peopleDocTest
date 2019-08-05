@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+    server:
+        build:
+            context: .
+            target: devImage
+        working_dir: /usr/src
+        volumes:
+            - .:/usr/src
+        ports:
+            - '5000:5000'
+        environment:
+            MONGO_HOST: mongo
+            MONGO_USERNAME: restaurant_api
+            MONGO_PASSWORD: strong_dev_password
+        command: .venv/bin/gunicorn -c src/config/gunicorn.py src.backend.main:app
+        depends_on:
+            - "mongo"
+
+    mongo:
+        image: mongo:3.6-stretch
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: restaurant_api
+            MONGO_INITDB_ROOT_PASSWORD: strong_dev_password
+        volumes:
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
